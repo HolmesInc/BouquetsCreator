@@ -37,6 +37,21 @@ class BouquetDesign:
 
     @staticmethod
     def get_flowers(flowers_quantity_string: str):
+        """ Extract flower species and their amount from bouquet design. E.g.:
+        bouquet_design = 'AL8d10r5t30', where 8d, 10r and 5t is quantity of flowers and their specie
+
+        :param flowers_quantity_string: substring of bouquet_design string, which represents flower specie
+            and their quantity. E.g.:
+            bouquet_design = 'AL8d10r5t30'
+            flowers_quantity_string = 8d10r5t
+        :return: parsed data about flowers needed to create the bouquet. E.g.:
+            flowers_quantity_string = 8d10r5t
+            return: {
+                "d": 8,
+                "r": 10,
+                "t": 5
+            }
+        """
         flowers = {}
 
         def _get_flower_species(bouquet_item: str):
@@ -51,6 +66,16 @@ class BouquetDesign:
 
     @staticmethod
     def get_total_flowers_in_bouquet(bouquet_design: str):
+        """ Extract info about total slots in a bouquet from bouquet design.
+        Example:
+            bouquet_design = 'AL8d10r5t30'
+            total_flowers_in_bouquet = 30 (last number in bouquet design)
+
+        :param bouquet_design: string representation of bouquet design, e.g.:
+            AL8d10r5t30 = <bouquet name><bouquet size><flower 1 quantity><flower 1 specie>...
+            <flower N quantity><flower N specie><total quantity of flowers in the bouquet>
+        :return: total quantity of flowers in the bouquet
+        """
         total_quantity = ''
         for index in range(len(bouquet_design) - 1, 0, -1):
             if bouquet_design[index].isnumeric():
@@ -67,6 +92,8 @@ class Bouquet:
         self.bouquet = defaultdict(int)
 
     def create(self):
+        """ Create bouquet, based on bouquet design and available flowers in flowers_storage
+        """
         available_flowers = getattr(self.flowers_storage, self.design.bouquet_size)
         amount_of_used_flowers = 0
 
@@ -91,6 +118,12 @@ class Bouquet:
                              "than required total number of flowers by bouquet design")
 
     def _fill_available_slots(self, slots):
+        """ If bouquet still have an available slot (e.g.: design was AL8d10r5t30, where 8+10+5 < 30), this slots
+        should bi filled with randoms flowers of the same size (according to the task description).
+        This method is about searching available flowers of the same size and adding it to the bouquet
+
+        :param slots: amount of available slots in bouquet
+        """
         available_flowers = getattr(self.flowers_storage, self.design.bouquet_size)
 
         available_flowers_copy = available_flowers.copy()
