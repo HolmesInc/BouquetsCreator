@@ -1,3 +1,32 @@
+from collections import defaultdict
+
+
+class FlowersStorage:
+    def __init__(self):
+        self.L = defaultdict(int)
+        self.S = defaultdict(int)
+
+    def append(self, flower: str):
+        flower_size = flower[1]
+        flower_specie = flower[0]
+        getattr(self, flower_size)[flower_specie] += 1
+
+    def is_amount_available(self, size: str, specie: str, amount: int):
+        if amount <= getattr(self, size)[specie]:
+            return True
+
+        return False
+
+    def reduce_amount(self, size: str, specie: str, amount: int):
+        new_amount = getattr(self, size)[specie] - amount
+        if new_amount < 0:
+            raise ValueError("Amount of available flowers can't be less than 0")
+        elif new_amount == 0:
+            del getattr(self, size)[specie]
+        else:
+            getattr(self, size)[specie] = new_amount
+
+
 class BouquetDesign:
     def __init__(self, design):
         self.design = design
@@ -44,9 +73,9 @@ def main():
         bouquet_designs.append(BouquetDesign(design))
 
     print('Please, enter flowers. Once you finish, enter blank line for proceeding to the next step')
-    flowers_storage = []
+    flowers_storage = FlowersStorage()
     while True:
-        flower = str(input())
+        flower = input()
         if flower == "":
             break
 
