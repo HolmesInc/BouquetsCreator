@@ -104,10 +104,10 @@ class Bouquet:
                 amount_of_used_flowers += flowers_amount
 
             else:
-                return False, (f"Unable create a bouquet by design {self.design.design}: available amount of "
-                               f"flower specie {flower_specie} is not enough. Available amount of "
-                               f"specie {flower_specie} is {available_flowers[flower_specie]}, "
-                               f"required {flowers_amount}")
+                raise ValueError(f"Unable create a bouquet by design {self.design.design}: available amount of "
+                                 f"flower specie {flower_specie} is not enough. Available amount of "
+                                 f"specie {flower_specie} is {available_flowers[flower_specie]}, "
+                                 f"required {flowers_amount}")
 
         if amount_of_used_flowers == self.design.total_flowers_in_bouquet:
             pass
